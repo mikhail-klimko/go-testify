@@ -12,7 +12,7 @@ import (
 )
 
 func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
-	totalCount := 4
+	totalCount := 5
 	target := fmt.Sprintf("/cafe?city=moscow&count=%d", totalCount)
 	req := httptest.NewRequest("GET", target, nil) // здесь нужно создать запрос к сервису
 
@@ -22,7 +22,7 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, responseRecorder.Code)
 	require.NotEmpty(t, responseRecorder.Body.String())
-	assert.Len(t, strings.Split(responseRecorder.Body.String(), ","), totalCount)
+	assert.Equal(t, strings.Join(cafeList["moscow"], ","), responseRecorder.Body.String())
 }
 
 func TestMainHandlerWhenWrongCity(t *testing.T) {
