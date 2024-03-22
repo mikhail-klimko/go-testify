@@ -38,3 +38,17 @@ func TestMainHandlerWhenWrongCity(t *testing.T) {
 	require.NotEmpty(t, responseRecorder.Body.String())
 	assert.Equal(t, errorMsg, responseRecorder.Body.String())
 }
+
+func TestMainHandlerBaseRequest(t *testing.T) {
+	target := "/cafe?city=moscow&count=1"
+	answer := []string{"Мир кофе"}
+	req := httptest.NewRequest("GET", target, nil)
+
+	responseRecorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(mainHandle)
+	handler.ServeHTTP(responseRecorder, req)
+
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
+	require.NotEmpty(t, responseRecorder.Body.String())
+	assert.Len(t, answer, len(strings.Split(responseRecorder.Body.String(), ",")))
+}
